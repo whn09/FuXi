@@ -114,14 +114,17 @@ def test_visualize(step, data_dir):
     visualize(f'ws850/{step:03d}.jpg', [ws850], [f'20230725-18+{step:03d}h'], vmin=0, vmax=30)
 
 
-def test_rmse(output_name, target_name):
+def test_rmse(output_name, target_name, step=120):
     output = xr.open_dataarray(output_name)
-    output = output.isel(time=0).sel(step=120)
+    # print('output.time:', output.time)
+    # print('output.step:', output.step)
+    output = output.isel(time=0).sel(step=step)
     target = xr.open_dataarray(target_name)
+    # print('target.time:', target.time.values)
 
-    for level in ["z500", "t850", "t2m", "u10", "v10", "msl", "tp"]:
+    for level in ["U10", "V10"]:  # "Z500", "T850", "T2M", , "MSL", "TP"
         out = output.sel(level=level)
         tgt = target.sel(level=level)
         rmse = weighted_rmse(out, tgt).load()
-        print(f"{level.upper()} 120h rmse: {rmse:.3f}")
+        print(f"{level.upper()} 120h rmse: {rmse}")  # {rmse:.3f}
 

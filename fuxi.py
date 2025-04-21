@@ -6,7 +6,7 @@ import xarray as xr
 import pandas as pd
 import onnxruntime as ort
 
-from util import save_like
+from util import save_like, test_rmse
 
 ort.set_default_logger_severity(3)
 
@@ -103,4 +103,14 @@ def run_inference(model_dir, data, num_steps, save_dir=""):
 if __name__ == "__main__":
     data = xr.open_dataarray(args.input)
     run_inference(args.model, data, args.num_steps, args.save_dir)
+    
+    # print('*'*40)
+    # test_rmse(os.path.join(args.save_dir, '006.nc'), args.input.replace('era5_input', 'era5_target_006'), step=6)
+    # print('*'*40)
+    # test_rmse(os.path.join('output', '006.nc'), args.input.replace('era5_input', 'era5_target_006'), step=6)
+    
+    # print('*'*40)
+    # test_rmse(os.path.join(args.save_dir, '120.nc'), args.input.replace('era5_input', 'era5_target_120'), step=120)
+    # print('*'*40)
+    # test_rmse(os.path.join('output', '120.nc'), args.input.replace('era5_input', 'era5_target_120'), step=120)
 
